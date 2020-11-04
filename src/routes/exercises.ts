@@ -10,13 +10,12 @@ const ExerciseController = require('../controllers/exercises')
 export default () => {
 
     // ADMIN ROUTES (create, update or delete exercises)
-    //router.get('/admin/excercises', passport.authenticate('jwt', {session: false}), authUserRole(USER_ROLE.ADMIN), ExerciseController.allExercises)
-    router.get('/admin/exercises',  ExerciseController.allExercises)
-    router.get('/admin/exercises/:id',  ExcerciseController.oneExercise)
-    router.post('/admin/exercises', ExcerciseController.createExercise)
-    router.post('/admin/exercises/program-change/:exercise-:program', ExcerciseController.changeProgram)
-    router.delete('/admin/exercises/:id', ExcerciseController.deleteExercise)
-    router.put('/admin/exercises/:id', ExcerciseController.updateExercise)
+    router.get('/admin/exercises',passport.authenticate('jwt', {session: false}), authUserRole(USER_ROLE.ADMIN),  ExerciseController.allExercises)
+    router.get('/admin/exercises/:id',passport.authenticate('jwt', {session: false}), authUserRole(USER_ROLE.ADMIN),  ExcerciseController.oneExercise)
+    router.post('/admin/exercises',passport.authenticate('jwt', {session: false}), authUserRole(USER_ROLE.ADMIN), ExcerciseController.createExercise)
+    router.post('/admin/exercises/program-change/:exercise-:program',passport.authenticate('jwt', {session: false}), authUserRole(USER_ROLE.ADMIN), ExcerciseController.changeProgram)
+    router.delete('/admin/exercises/:id',passport.authenticate('jwt', {session: false}), authUserRole(USER_ROLE.ADMIN), ExcerciseController.deleteExercise)
+    router.put('/admin/exercises/:id',passport.authenticate('jwt', {session: false}), authUserRole(USER_ROLE.ADMIN), ExcerciseController.updateExercise)
 
     
     return router

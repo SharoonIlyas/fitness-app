@@ -10,11 +10,11 @@ const {authUserRole} = require("../auth/basicAuth")
 export default () => {
 
     //ADMIN ROUTES (create, update or delete programs)
-    router.get('/admin/programs', ProgramController.allPrograms)
-    router.get('/admin/programs/:id', ProgramController.oneProgram)
-    router.post('/admin/programs', ProgramController.createProgram)
-    router.delete('/admin/programs/:id',  ProgramController.deleteProgram)
-    router.put('/admin/programs/:id', ProgramController.updateProgram)
+    router.get('/admin/programs',passport.authenticate('jwt', {session: false}), authUserRole(USER_ROLE.ADMIN), ProgramController.allPrograms)
+    router.get('/admin/programs/:id',passport.authenticate('jwt', {session: false}), authUserRole(USER_ROLE.ADMIN), ProgramController.oneProgram)
+    router.post('/admin/programs',passport.authenticate('jwt', {session: false}), authUserRole(USER_ROLE.ADMIN), ProgramController.createProgram)
+    router.delete('/admin/programs/:id', passport.authenticate('jwt', {session: false}), authUserRole(USER_ROLE.ADMIN), ProgramController.deleteProgram)
+    router.put('/admin/programs/:id',passport.authenticate('jwt', {session: false}), authUserRole(USER_ROLE.ADMIN), ProgramController.updateProgram)
 
     return router
 }
