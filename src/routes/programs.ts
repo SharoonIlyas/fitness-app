@@ -1,26 +1,20 @@
-import {
-	Router,
-	Request,
-	Response,
-	NextFunction
-} from 'express'
+import {Router} from 'express'
+import {USER_ROLE} from "../utils/enums";
 
-import { models } from '../db'
-
+const ProgramController = require('../controllers/programs')
 const router: Router = Router()
-
-const {
-	Program
-} = models
+const passport = require('passport')
+require('../auth/passport')
+const {authUserRole} = require("../auth/basicAuth")
 
 export default () => {
-	router.get('/', async (_req: Request, res: Response, _next: NextFunction) => {
-		const programs = await Program.findAll()
-		return res.json({
-			data: programs,
-			message: 'List of programs'
-		})
-	})
 
-	return router
+    //ADMIN ROUTES (create, update or delete programs)
+    router.get('/admin/programs', ProgramController.allPrograms)
+    router.get('/admin/programs/:id', ProgramController.oneProgram)
+    router.post('/admin/programs', ProgramController.createProgram)
+    router.delete('/admin/programs/:id',  ProgramController.deleteProgram)
+    router.put('/admin/programs/:id', ProgramController.updateProgram)
+
+    return router
 }

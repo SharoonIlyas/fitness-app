@@ -1,28 +1,23 @@
-import { Router, Request, Response, NextFunction } from 'express'
-
-import { models } from '../db'
-
+import {Router} from 'express'
+import {USER_ROLE} from "../utils/enums";
 const router: Router = Router()
-
-const {
-	Exercise,
-	Program
-} = models
+const ExcerciseController = require('../controllers/exercises')
+const passport = require('passport')
+require('../auth/passport')
+const {authUserRole} = require("../auth/basicAuth")
+const ExerciseController = require('../controllers/exercises')
 
 export default () => {
-	router.get('/', async (_req: Request, res: Response, _next: NextFunction) => {
-		const exercises = await Exercise.findAll({
-			include: [{
-				model: Program,
-				as: 'program'
-			}]
-		})
 
-		return res.json({
-			data: exercises,
-			message: 'List of exercises'
-		})
-	})
+    // ADMIN ROUTES (create, update or delete exercises)
+    //router.get('/admin/excercises', passport.authenticate('jwt', {session: false}), authUserRole(USER_ROLE.ADMIN), ExerciseController.allExercises)
+    router.get('/admin/exercises',  ExerciseController.allExercises)
+    router.get('/admin/exercises/:id',  ExcerciseController.oneExercise)
+    router.post('/admin/exercises', ExcerciseController.createExercise)
+    router.post('/admin/exercises/program-change/:exercise-:program', ExcerciseController.changeProgram)
+    router.delete('/admin/exercises/:id', ExcerciseController.deleteExercise)
+    router.put('/admin/exercises/:id', ExcerciseController.updateExercise)
 
-	return router
+    
+    return router
 }
