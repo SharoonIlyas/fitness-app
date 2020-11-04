@@ -10,11 +10,10 @@ export default () => {
 
     // (get all users and all its data)
     router.get('/users',passport.authenticate('jwt',{session:false}), authUserRole(USER_ROLE.ADMIN) ,AdminController.allUsers)
-
     // (get ,edit or delete a user)
     router.get('/users/:username',passport.authenticate('jwt',{session:false}),authUserRole(USER_ROLE.ADMIN),AdminController.singleUser)
-    router.put('/users/:username',passport.authenticate('jwt',{session:false}),authUserRole(USER_ROLE.ADMIN),AdminController.singleUserUpdate)
-    router.delete('/users/:username',passport.authenticate('jwt',{session:false}),authUserRole(USER_ROLE.ADMIN),AdminController.singleUserDelete)
+    router.put('/users/:username',passport.authenticate('jwt',{session:false}),authUserRole(USER_ROLE.ADMIN),AdminController.UserUpdate)
+    router.delete('/users/:username',passport.authenticate('jwt',{session:false}),authUserRole(USER_ROLE.ADMIN),AdminController.UserDelete)
 
     return router
 }

@@ -44,9 +44,12 @@ module.exports = {
                         where: {username: _req.params.username},
 
                     })
+                const data =await User.findOne(
+                    {where: {username: _req.params.username},
+                        attributes: ['username', 'name', 'surname', 'email', 'age', 'nickName', 'role']})
                 if (user) return res.status(202).json({
-                    user: user,
-                    message: "successfuly update user"
+                    user: data,
+                    message: "successfully updated user"
                 })
                 return res.json({error: "no such user exist"})
             } catch (e) {
@@ -61,7 +64,7 @@ module.exports = {
         if (_req.user.username === _req.params.username) {
             try {
                 const user = await User.destroy({where: {username: _req.params.username},})
-                if (user) return res.json({message: "user deleted secessfully"})
+                if (user) return res.json({message: "user deleted"})
                 return res.json({error: "no such user exist"})
             } catch (e) {
                 return res.json({error: e})

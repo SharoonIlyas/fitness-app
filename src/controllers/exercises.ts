@@ -72,11 +72,13 @@ module.exports = {
 
     deleteExercise: async (_req: Request, res: Response, _next: NextFunction) => {
         const checkExercise = await Exercise.findOne({where: {id: _req.params.id}})
-        if (checkExercise == null) return res.status(404).json({error: "exercise not found with this id"})
+        if (checkExercise == null) return res.status(404)
+            .json({error: "exercise not found with this id"})
         try {
             Exercise.destroy({where: {id: _req.params.id}}).then(function (result: any) {
                 if (result) {
-                    return res.status(202).json({message: "successfully deleted exercise"})
+                    return res.status(202)
+                        .json({message: "successfully deleted exercise"})
                 }
             })
         } catch (err: any) {

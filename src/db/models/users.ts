@@ -1,6 +1,5 @@
 import {DataTypes, Sequelize,} from 'sequelize'
 import {DatabaseModel} from "../../types/db";
-import {ProgramModel} from "./program";
 
 const {v4: uuidv4} = require('uuid');
 const bcrypt = require("bcrypt")
@@ -9,6 +8,7 @@ export class UserModel extends DatabaseModel {
 }
 
 export default (sequelize: Sequelize) => {
+
     UserModel.init({
             id: {
                 type: DataTypes.STRING,
@@ -18,13 +18,24 @@ export default (sequelize: Sequelize) => {
             },
             email: {
                 type: DataTypes.STRING,
-                unique: true,
-                allowNull: false,
+                unique: {
+                    // @ts-ignore
+                    args: true,
+                    msg: 'Oops. Looks like you already have an account with this email address. Please try to login.',
+                },
                 validate: {
                     isEmail: {
-                        msg: "email is not valid"
+                        // @ts-ignore
+                        args: true,
+                        msg: 'The email you entered is invalid or is already in our system.'
+                    },
+                    max: {
+                        // @ts-ignore
+                        args: 254,
+                        msg: 'The email you entered is invalid or longer than 254 characters.'
                     }
                 }
+
             },
             username: {
                 type: DataTypes.STRING,
@@ -84,7 +95,7 @@ export default (sequelize: Sequelize) => {
                 beforeValidate(user: any) {
                     user.id = uuidv4();
                 },
-                afterValidate: (user: any) => {
+                beforeCreate: (user: any) => {
                     user.password = bcrypt.hashSync(user.password, 8)
                 },
             },

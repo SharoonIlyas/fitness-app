@@ -19,7 +19,7 @@ module.exports = {
     signup: async (_req: Request, res: Response, _next: NextFunction) => {
         User.create(_req.body).then(function (result: any) {
             console.log("from sigup " + result.DataValues)
-            const token = signToken(result)
+            const token = signToken(result.toJSON())
             res.status(200).json({
                 token: token,
                 message: 'user is created'
@@ -34,7 +34,8 @@ module.exports = {
 
     signin: async (_req: Request, res: Response, _next: NextFunction) => {
         // @ts-ignore
-        var token = signToken(_req.user)
+        var token = signToken(_req.user.toJSON())
+
         return res.json({token})
     },
 
